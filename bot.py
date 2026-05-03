@@ -1,11 +1,25 @@
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
 import telebot
+
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b'Bot is running')
+    def log_message(self, format, *args):
+        return
+
+threading.Thread(target=lambda: HTTPServer(('0.0.0.0', 10000), Handler).serve_forever(), daemon=True).start()
+
 TOKEN = os.environ.get('BOT_TOKEN')
 bot = telebot.TeleBot(TOKEN)
-  
-@bot.message_handler(commands=['start'])  
-def send_welcome(message):  
-    bot.reply_to(message, "Welcome to Naija Exams Bot 🇳🇬\n\nFree WAEC + NECO CBT practice.\n\nType /indices to start Math")
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Welcome to Naija Exams AKS Bot! 🎓\n\nType /indices to start")
+
 @bot.message_handler(commands=['indices'])
 def indices_q1(message):
     q = """Q1. WAEC 2023: Simplify 3² × 3⁴
@@ -17,7 +31,7 @@ Reply A, B, C, or D
 
 @bot.message_handler(commands=['solution1'])
 def solution1(message):
-    sol = """Solution Q1: 
+    sol = """Solution Q1:
 Step 1: Same base 3, so ADD powers
 Step 2: 2 + 4 = 6 → 3⁶
 Answer: A
@@ -27,12 +41,22 @@ Type /indices2 for Q2"""
 
 @bot.message_handler(commands=['indices2'])
 def indices_q2(message):
-    q = """Q2. NECO 2022: Evaluate 16^¾
+    q = """Q2. NECO 2022: Evaluate 16^(3/4)
 A) 8  B) 12  C) 64  D) 4
 
 Reply A, B, C, or D
 /solution2 for steps"""
     bot.reply_to(message, q)
+
+@bot.message_handler(commands=['solution2'])
+def solution2(message):
+    sol = """Solution Q2:
+Step 1: 16^(3/4) = (16^1/4)³
+Step 2: 4th root of 16 = 2, then 2³ = 8
+Answer: A
+
+Type /indices3 for Q3"""
+    bot.reply_to(message, sol)
 
 @bot.message_handler(commands=['indices3'])
 def indices_q3(message):
@@ -90,17 +114,19 @@ Answer: A
 🎉 Topic complete! You finished Indices.
 Type /topics to see more subjects soon"""
     bot.reply_to(message, sol)
-@bot.message_handler(func=lambda message: message.text.upper().strip() in ['A','B','C','D'])
+
+@bot.message_handler(func=lambda message: True)
 def check_all_answers(message):
     ans = message.text.upper().strip()
-    if ans == 'B':  # Q3 correct
-        bot.reply_to(message, "Correct ✅ That's power rule! Next: /indices4 or /solution3")
-    elif ans == 'C':  # Q4 correct  
-        bot.reply_to(message, "Correct ✅ Zero power rule! Next: /indices5 or /solution4")
-    elif ans == 'A':  # Q1, Q2, Q5 correct
-        bot.reply_to(message, "Correct ✅ Fire! Next question or /solution for steps")
+    if ans == 'A':  # Q1, Q2, Q5 correct
+        bot.reply_to(message, "Correct ✅")
+    elif ans == 'B':  # Q3 correct
+        bot.reply_to(message, "Correct ✅ That's 2⁶")
+    elif ans == 'C':  # Q4 correct
+        bot.reply_to(message, "Correct ✅ Any number to power 0 = 1")
     else:
-        bot.reply_to(message, "Not quite ❌ Check the rules. Type /solution1, /solution2, etc for steps")
-print("Bot running... Don't close Pydroid")  
+        bot.reply_to(message, "Not quite. Try again or type /solution1 to see steps")
+
+print("Bot running...")
 if __name__ == "__main__":
-       bot.infinity_polling()
+    bot.infinity_polling()
