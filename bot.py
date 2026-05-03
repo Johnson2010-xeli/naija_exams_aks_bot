@@ -1,7 +1,7 @@
 import os
 import telebot
-   TOKEN = os.environ.get('BOT_TOKEN')
-   bot = telebot.TeleBot(TOKEN)
+TOKEN = os.environ.get('BOT_TOKEN')
+bot = telebot.TeleBot(TOKEN)
   
 @bot.message_handler(commands=['start'])  
 def send_welcome(message):  
@@ -102,5 +102,5 @@ def check_all_answers(message):
     else:
         bot.reply_to(message, "Not quite ❌ Check the rules. Type /solution1, /solution2, etc for steps")
 print("Bot running... Don't close Pydroid")  
-   if __name__ == "__main__":
+if __name__ == "__main__":
        bot.infinity_polling()
