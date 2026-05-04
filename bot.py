@@ -231,6 +231,6 @@ def check_all_answers(message):
     else:
         bot.reply_to(message, "Not quite. Try again or type /solution1 to see steps")
 
-print("Bot running...")
 if __name__ == "__main__":
+    print("Bot running...")
     bot.infinity_polling()
