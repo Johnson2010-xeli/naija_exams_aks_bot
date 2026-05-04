@@ -217,7 +217,7 @@ Answer: A
 
 🎉 Indices complete! You finished HARD mode.
 Type /topics to pick a new topic"""
-    bot.reply_to(message, sol)2
+    bot.reply_to(message, sol)
 
 @bot.message_handler(func=lambda message: True)
 def check_all_answers(message):
