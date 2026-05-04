@@ -110,7 +110,8 @@ def solution5(message):
 Step 1: Same base 7, dividing = SUBTRACT powers
 Step 2: 5 - 3 = 2 → 7²
 Answer: A
-
+Type /indices6 for Q6"""
+    bot.reply_to(message, sol)
 @bot.message_handler(commands=['indices6'])
 def indices_q6(message):
     q = """Q6. WAEC 2021: If 8^(x-1) = 1/64, find x
